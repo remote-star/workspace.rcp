@@ -1,4 +1,4 @@
-package toaster;
+package demo;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.application.ActionBarAdvisor;
@@ -18,9 +18,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     
     public void preWindowOpen() {
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        configurer.setInitialSize(new Point(1000, 600));
-        configurer.setShowCoolBar(false);
+        configurer.setInitialSize(new Point(600, 400));
+        configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(false);
-        configurer.setTitle("Toaster"); //$NON-NLS-1$
     }
+    
 }
