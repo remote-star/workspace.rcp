@@ -22,14 +22,13 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            category="toaster.commands.categories.file"
             id="toaster.commands.exit"
             name="退出">
       </command>
-      <category
-            id="toaster.commands.categories.file"
-            name="文件">
-      </category>
+      <command
+            id="toaster.commands.input"
+            name="导入">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -71,6 +70,10 @@
             class="commands.ExitHandler"
             commandId="toaster.commands.exit">
       </handler>
+      <handler
+            class="commands.InputHandler"
+            commandId="toaster.commands.input">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -79,13 +82,6 @@
             class="toaster.views.ProjectsView"
             id="toaster.views.ProjectsView"
             name="项目"
-            restorable="true">
-      </view>
-      <view
-            allowMultiple="true"
-            class="toaster.views.CodeView"
-            id="toaster.views.CodeView"
-            name="代码"
             restorable="true">
       </view>
       <view
