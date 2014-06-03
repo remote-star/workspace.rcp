@@ -18,6 +18,7 @@ public class CodeEditor extends EditorPart {
 
 	public static final String ID = "toaster.editor.CodeEditor";
 	Text text;
+	private String path;
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		// TODO Auto-generated method stub
@@ -35,7 +36,6 @@ public class CodeEditor extends EditorPart {
 			throws PartInitException {
 		this.setSite(site);
 		this.setInput(input);
-		setPartName("A");
 	}
 
 	@Override
@@ -88,11 +88,20 @@ public class CodeEditor extends EditorPart {
 	        text.setText(string);
 	}
 	
-	public void setMyTitle(String title){
+	public void setMyTitle(String title, String path){
 		this.setPartName(title);
+		this.setMyTitleToolTip(path);
+		firePropertyChange(PROP_TITLE);
 	}
 	
-//	public String getPartName(){
-//		return "a";
-//	}
+
+	private void setMyTitleToolTip(String path) {
+		// TODO Auto-generated method stub
+		this.path = path;
+	}
+
+	@Override
+	public String getTitleToolTip(){
+		return path;
+	}
 }

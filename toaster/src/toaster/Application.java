@@ -16,6 +16,7 @@ public class Application implements IApplication {
 	 */
 	public Object start(IApplicationContext context) throws Exception {
 		Display display = PlatformUI.createDisplay();
+		System.out.println("start");
 		try {
 			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
 			if (returnCode == PlatformUI.RETURN_RESTART)
@@ -32,6 +33,7 @@ public class Application implements IApplication {
 	 * @see org.eclipse.equinox.app.IApplication#stop()
 	 */
 	public void stop() {
+		System.out.println("stop");
 		if (!PlatformUI.isWorkbenchRunning())
 			return;
 		final IWorkbench workbench = PlatformUI.getWorkbench();

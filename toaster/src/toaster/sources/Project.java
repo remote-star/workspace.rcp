@@ -1,6 +1,5 @@
 package toaster.sources;
 
-import toaster.views.ProjectsView;
 
 public class Project {
 	
@@ -15,5 +14,6 @@ public class Project {
 	
 	public void input(){
 	}
+	
 	
 }

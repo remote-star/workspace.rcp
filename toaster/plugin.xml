@@ -29,6 +29,14 @@
             id="toaster.commands.input"
             name="导入">
       </command>
+      <command
+            id="toaster.commands.create"
+            name="新建">
+      </command>
+      <command
+            id="toaster.commands.remove"
+            name="移除">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -41,6 +49,11 @@
             <command
                   commandId="toaster.commands.input"
                   label="导入"
+                  style="push">
+            </command>
+            <command
+                  commandId="toaster.commands.create"
+                  label="新建"
                   style="push">
             </command>
             <separator
@@ -63,6 +76,25 @@
             </command>
          </menu>
       </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:toaster.views.ProjectsSourceCodeView?after=additions">
+         <command
+               commandId="toaster.commands.remove"
+               icon="icons/alt_about.gif"
+               label="移除"
+               style="push"
+               tooltip="213">
+         </command>
+         <menu
+               label="label">
+            <command
+                  commandId="toaster.commands.remove"
+                  label="啊啊"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -74,14 +106,22 @@
             class="commands.InputHandler"
             commandId="toaster.commands.input">
       </handler>
+      <handler
+            class="commands.CreateHandler"
+            commandId="toaster.commands.create">
+      </handler>
+      <handler
+            class="commands.RemoveHandler"
+            commandId="toaster.commands.remove">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
-            class="toaster.views.ProjectsView"
-            id="toaster.views.ProjectsView"
-            name="项目"
+            class="toaster.views.ProjectsSourceCodeView"
+            id="toaster.views.ProjectsSourceCodeView"
+            name="项目源文件"
             restorable="true">
       </view>
       <view
@@ -114,6 +154,12 @@
             name="工具"
             restorable="true">
       </view>
+      <view
+            class="toaster.views.ProjectsTestView"
+            id="toaster.views.ProjectsTestView"
+            name="项目测试文件"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
@@ -121,7 +167,7 @@
             targetID="toaster.perspective">
          <view
                closeable="false"
-               id="toaster.views.ProjectsView"
+               id="toaster.views.ProjectsSourceCodeView"
                minimized="false"
                moveable="false"
                ratio="0.2f"
@@ -130,11 +176,17 @@
                visible="true">
          </view>
          <view
+               id="toaster.views.ProjectsTestView"
+               minimized="false"
+               relationship="stack"
+               relative="toaster.views.ProjectsSourceCodeView">
+         </view>
+         <view
                id="toaster.views.InvocationView"
                minimized="false"
                moveable="false"
                relationship="stack"
-               relative="toaster.views.ProjectsView">
+               relative="toaster.views.ProjectsSourceCodeView">
          </view>
          <view
                closeable="false"
@@ -175,6 +227,23 @@
             id="toaster.editor.CodeEditor"
             name="代码">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <viewerContribution
+            id="toaster.viewerContribution1"
+            targetID="toaster.views.ProjectsSourceCodeView">
+         <menu
+               id="toaster.menu1"
+               label="label">
+         </menu>
+         <action
+               class="toaster.actions.removeAction"
+               id="toaster.action1"
+               label="label"
+               style="push">
+         </action>
+      </viewerContribution>
    </extension>
 
 </plugin>
