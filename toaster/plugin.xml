@@ -81,7 +81,6 @@
             locationURI="popup:toaster.views.ProjectsSourceCodeView?after=additions">
          <command
                commandId="toaster.commands.remove"
-               icon="icons/alt_about.gif"
                label="移除"
                style="push"
                tooltip="213">
@@ -227,23 +226,6 @@
             id="toaster.editor.CodeEditor"
             name="代码">
       </editor>
-   </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <viewerContribution
-            id="toaster.viewerContribution1"
-            targetID="toaster.views.ProjectsSourceCodeView">
-         <menu
-               id="toaster.menu1"
-               label="label">
-         </menu>
-         <action
-               class="toaster.actions.removeAction"
-               id="toaster.action1"
-               label="label"
-               style="push">
-         </action>
-      </viewerContribution>
    </extension>
 
 </plugin>

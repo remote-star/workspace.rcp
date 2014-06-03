@@ -3,16 +3,28 @@ package toaster.views;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProviderChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -41,49 +53,104 @@ public class ProjectsSourceCodeView extends ViewPart {
 
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 	Tree tree;
-	
-	public ProjectsSourceCodeView() {
 
+	public ProjectsSourceCodeView() {
 	}
+
 	// 为父类中的抽象方法，创建视图中的各种控件
 	public void createPartControl(Composite parent) {
-		System.out.println("partControl");
-		tree = new Tree(parent, SWT.BORDER | SWT.SINGLE);
-		tree.addListener(SWT.MouseDoubleClick, new Listener() {
+		final TreeViewer tv = new TreeViewer(parent);
+		// 添加内容管理器
+		tv.setContentProvider(new FileTreeContentProvider()); 
+		// 添加标签管理器
+		tv.setLabelProvider(new FileTreeLabelProvider()); 
+		// 设置treeviewer的输入
+		tv.setInput("root"); // pass a non-null that will be ignored
+
+		MenuManager menuManager = new MenuManager();
+		Menu menu = menuManager.createContextMenu(tv.getControl());
+		MenuItem item = new MenuItem (menu, SWT.PUSH);
+		item.setText ("Popup");
+		tv.getControl().setMenu(menu);
+		getSite().registerContextMenu(menuManager, tv);
+
+		tv.addDoubleClickListener(new IDoubleClickListener() {
 			@Override
-			public void handleEvent(Event event) {
-				if(event.button != 1) { //按键不是左键跳出. 1左键,2中键,3右键  
-		            return;  
-		        }  
-				Worker.openEditor(tree);
-			}
-		});
-		tree.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				switch (e.keyCode) { 
-					case SWT.KEYPAD_CR: 
-					case SWT.CR:
-						Worker.openEditor(tree);
-						break; 
+			public void doubleClick(DoubleClickEvent event) {
+				System.out.println("a");
+				if (event.getSelection() instanceof File){
+					System.out.println("b");
+					File file = (File)event.getSelection();
+					if(!file.isDirectory()){
+						IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow(); 
+						CodeEditorInput editorInput = new CodeEditorInput();
+//						String relativePath = getPath(item);
+//						
+//						IEditorReference[] ies = window.getActivePage().getEditorReferences();
+//						for(IEditorReference ie : ies){
+//							if(ie.getTitleToolTip().equals(relativePath)){
+//								window.getActivePage().activate(ie.getEditor(false));
+//								ie.getEditor(false).setFocus();
+//								return;
+//							}
+//						}
+						
+//						Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+//						//检测选择文件是否适宜打开显示，如果不是则弹出提示并拒绝打开
+//						if(!openable(file)){
+//							MessageBox mb = new MessageBox(shell);
+//							mb.setMessage("此文件类型不适宜用编辑器打开");
+//							mb.setText("不能打开");
+//							mb.open();
+//							return;
+//						}
+						
+						// 打开该编辑器
+						try {
+							CodeEditor editor = (CodeEditor)window.getActivePage().openEditor(editorInput, CodeEditor.ID);
+							editor.readFile(file);
+//							editor.setMyTitle(item.getText(), relativePath);
+							editor.setFocus();
+						} catch (PartInitException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		});
-		
+	}
 
+	public void setFocus() {
+	}
+}
+
+class FileTreeContentProvider implements ITreeContentProvider { 
+
+	public Object[] getChildren(Object arg0) { 
+		//返回树的下一级节点
+		return ((File) arg0).listFiles();
+	}
+	public Object getParent(Object arg0) {
+
+		// 返回树的上一级节点  
+		return ((File) arg0).getParentFile(); 
+	}
+
+	public boolean hasChildren(Object arg0) { 
+		Object[] obj = getChildren(arg0);
+		// 判断树是否有下一级节点，true为在节点显示"+"信息 
+		return obj == null ? false : obj.length > 0;
+	}
+
+	public Object[] getElements(Object arg0) { 
+		ArrayList<File> projects = new ArrayList<>();
 		File file = new File("config\\ProjectsList.txt");  
 		try {  
 			BufferedReader reader = new BufferedReader(new FileReader(file));  
 			String line = reader.readLine();  
 			while(line!=null){  
-				input(line);
+				projects.add(new File(line));
 				line = reader.readLine();  
 			}  
 			reader.close();  
@@ -92,126 +159,52 @@ public class ProjectsSourceCodeView extends ViewPart {
 		} catch (IOException e) {  
 			e.printStackTrace();  
 		}  
-		
-//		Menu menu = new Menu(tree);
-//
-//		    // 创建谈出菜单的菜单项 
-//		    MenuItem newItem = new MenuItem(menu, SWT.CASCADE); 
-//		    newItem.setText("New"); 
-//		    MenuItem refreshItem = new MenuItem(menu, SWT.NONE); 
-//		    refreshItem.setText("Refresh"); 
-//		    MenuItem deleteItem = new MenuItem(menu, SWT.NONE); 
-//		    deleteItem.setText("Delete"); 
-//
-//		    new MenuItem(menu, SWT.SEPARATOR); 
-//		    // 添加复选菜单项 
-//		    MenuItem checkItem = new MenuItem(menu, SWT.CHECK); 
-//		    checkItem.setText("Check"); 
-//		    checkItem.setSelection(true); 
-//
-//		    // 添加一个push菜单项 
-//		    MenuItem pushItem = new MenuItem(menu, SWT.PUSH); 
-//		    pushItem.setText("Push"); 
-//
-//		    new MenuItem(menu, SWT.SEPARATOR); 
-//
-//		    // 创建一些单选菜单项 
-//		    MenuItem item1 = new MenuItem(menu, SWT.RADIO); 
-//		    item1.setText("Radio One"); 
-//		    MenuItem item2 = new MenuItem(menu, SWT.RADIO); 
-//		    item2.setText("Radio Two"); 
-//		    MenuItem item3 = new MenuItem(menu, SWT.RADIO); 
-//		    item3.setText("Radio Three"); 
-//
-//		    //创建一个单选的菜单项组 
-//		    new MenuItem(menu, SWT.SEPARATOR); 
-//
-//		    // 创建一些单选项 
-//		    MenuItem itema = new MenuItem(menu, SWT.RADIO); 
-//		    itema.setText("Radio A"); 
-//		    MenuItem itemb = new MenuItem(menu, SWT.RADIO); 
-//		    itemb.setText("Radio B"); 
-//		    MenuItem itemc = new MenuItem(menu, SWT.RADIO); 
-//		    itemc.setText("Radio C"); 
-//
-//		    //创建一个新的下拉菜单 
-//		    Menu newMenu = new Menu(menu); 
-//		    newItem.setMenu(newMenu); 
-//
-//		    // 创建此新的下拉菜单的菜单项 
-//		    MenuItem shortcutItem = new MenuItem(newMenu, SWT.NONE); 
-//		    shortcutItem.setText("Shortcut"); 
-//		    MenuItem iconItem = new MenuItem(newMenu, SWT.NONE); 
-//		    iconItem.setText("Icon"); 
-//
-//		    // 设置此菜单与Label关联 
-//		    tree.setMenu(menu); 
-//		
-		
-		
-		
-		
-		
-		
-		
-		
-//		
-//		MenuManager menuManager = new MenuManager();
-//		Menu menu = menuManager.createContextMenu(parent);
-//		MenuItem item = new MenuItem (menu, SWT.PUSH);
-//		item.setText ("Popup");
-//		parent.setMenu(menu);
-//		getSite().registerContextMenu(menuManager, (ISelectionProvider) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor().getEditorSite().getSelectionProvider());
+		return projects.toArray();
 	}
 
-	public void setFocus() {
-//		viewer.getControl().setFocus();
+	public void dispose() { 
+
+	}
+	public void inputChanged(Viewer arg0, Object arg1, Object arg2) { 
+
+	}
+}
+// 定义标签提供器
+class FileTreeLabelProvider implements ILabelProvider { 
+	private List listeners;
+	private Image file;
+	private Image dir;
+	
+	public FileTreeLabelProvider() { 
+		listeners = new ArrayList();
 	}
 
-
-	public boolean input(String directory) {
-		String ProjectName = directory.substring(directory.lastIndexOf("\\")+1);
-		
-		for ( TreeItem it : tree.getItems()){
-			if(it.getText().equals(ProjectName)){
-				MessageBox mb = new MessageBox(shell);
-				mb.setMessage("已有同名项目，不能重复导入");
-				mb.setText("不能导入");
-				mb.open();
-				tree.setSelection(it);
-				return false;
-			}
-		}
-		
-		TreeItem root = new TreeItem(tree, SWT.NONE);
-		root.setText(ProjectName);
-		root.setData(directory);
-		root.setImage(ImageShop.get(ImageShop.PROJECT_IMAGE));
-		
-		refreshFileList(directory, root);
-
-		tree.setSelection(root);
-		
-		return true;
+	public Image getImage(Object arg0) { 
+		//返回目录或文件的图标 
+		return ((File) arg0).isDirectory() ? ImageShop.get(ImageShop.FOLDER_IMAGE) : ImageShop.get(ImageShop.FILE_IMAGE); 
 	}
 	
-    public void refreshFileList(String strPath, TreeItem root) { 
-        File dir = new File(strPath); 
-        File[] files = dir.listFiles(); 
-        if (files == null) 
-            return; 
-        for (int i = 0; i < files.length; i++) { 
-        	String filePath = files[i].getAbsolutePath();
-        	String fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
-        	TreeItem newRoot = new TreeItem(root, SWT.NONE);
-        	newRoot.setText(fileName);
-        	newRoot.setData(filePath);
-            if (files[i].isDirectory()) { 
-                refreshFileList(files[i].getAbsolutePath(), newRoot); 
-                newRoot.setImage(ImageShop.get(ImageShop.FOLDER_IMAGE));
-            } else {
-                newRoot.setImage(ImageShop.get(ImageShop.FILE_IMAGE));
-            }
-        } 
-    }
+	public String getText(Object arg0) { 
+		return ((File) arg0).getName();
+	}
+	
+	public void dispose() {
+	}
+	
+	public boolean isLabelProperty(Object arg0, String arg1) {
+		return false; 
+	} 
+
+	public void removeListener(ILabelProviderListener arg0) { 
+		//删除监听器 
+		listeners.remove(arg0); 
+	}
+
+	@Override
+	public void addListener(ILabelProviderListener listener) {
+		// TODO Auto-generated method stub
+
+	}
 }
+
+
