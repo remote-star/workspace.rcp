@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -25,93 +26,62 @@ import org.eclipse.ui.part.ViewPart;
 
 import toaster.editor.CodeEditor;
 import toaster.editor.CodeEditorInput;
+import toaster.providers.FileTreeContentProvider;
+import toaster.providers.FileTreeLabelProvider;
+import toaster.providers.TestTreeContentProvider;
 import toaster.sources.ImageShop;
 import toaster.workers.Worker;
 
-public class ProjectsTestView extends ViewPart{
+public class ProjectsTestView extends BasicTreeView{
 
 	public static final String ID = "toaster.views.ProjectsTestView";
-	Tree tree;
-	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		tree = new Tree(parent, SWT.BORDER | SWT.SINGLE);
-		tree.addListener(SWT.MouseDoubleClick, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				if(event.button != 1) { //按键不是左键跳出. 1左键,2中键,3右键  
-		            return;  
-		        }  
-				Worker.openEditor(tree);
-			}
-		});
-		tree.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				switch (e.keyCode) { 
-					case SWT.KEYPAD_CR: 
-					case SWT.CR:
-						Worker.openEditor(tree);
-						break; 
-				}
-			}
-		});
-		
-
-		File file = new File("config\\ProjectsList.txt");  
-		try {  
-			BufferedReader reader = new BufferedReader(new FileReader(file));  
-			String line = reader.readLine();  
-			while(line!=null){  
-				input(line);
-				line = reader.readLine();  
-			}  
-			reader.close();  
-		} catch (FileNotFoundException e) {  
-			e.printStackTrace();  
-		} catch (IOException e) {  
-			e.printStackTrace();  
-		}  
+		super.createPartControl(parent);
+		tv.setContentProvider(new TestTreeContentProvider()); 
+		// 添加标签管理器
+		tv.setLabelProvider(new FileTreeLabelProvider()); 
+		// 设置treeviewer的输入
+		tv.setInput("root"); // pass a non-null that will be ignored
 	}
 
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public boolean input(String directory) {
-		
-		String ProjectName = directory.substring(directory.lastIndexOf("\\")+1);
-		
-		for ( TreeItem it : tree.getItems()){
-			if(it.getText().equals(ProjectName)){
+	public boolean input(String path){
+		String projectName = path.substring(path.lastIndexOf("\\"));
+		Object[] roots = ((TestTreeContentProvider)(tv.getContentProvider())).getElements("root");
+		ArrayList<Object> newRoots = new ArrayList<>();
+		for(Object o : roots){
+			if(((File)o).getName() == projectName){
 				MessageBox mb = new MessageBox(shell);
-				mb.setMessage("已有同名项目，不能重复导入");
-				mb.setText("不能导入");
+				mb.setMessage("已有同名项目测试文件夹，不再重复创建");
+				mb.setText("警告");
 				mb.open();
-				tree.setSelection(it);
 				return false;
+			} else {
+				newRoots.add(o);
 			}
 		}
-		
-		TreeItem root = new TreeItem(tree, SWT.NONE);
-		root.setText(ProjectName);
-		root.setData(directory);
-		root.setImage(ImageShop.get(ImageShop.PROJECT_IMAGE));
-		
-
-		tree.setSelection(root);
-		
+		File folder = new File("testFiles\\" + projectName);
+		folder.mkdir();
+		if(!folder.exists()){
+			return false;
+		}
+		tv.add("root", folder);
 		return true;
 	}
 
+	public void remove(ArrayList<Object> element) {
+		Object[] roots = ((TestTreeContentProvider)(tv.getContentProvider())).getElements("root");
+		ArrayList<Object> list = new ArrayList<Object>();
+		for(Object o : roots){
+			if(!o.equals(element)){
+				list.add(o);
+			} else {
+				((File)o).delete();
+			}
+		}
+		roots = list.toArray();
+		
+		
+	}
 }

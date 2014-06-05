@@ -1,5 +1,6 @@
 package commands;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,25 +31,26 @@ public class InputHandler extends AbstractHandler {
 		String fileName = dialog.open();
 		
 		IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		
 		IViewPart sourcViewPart = window.getActivePage().findView(ProjectsSourceCodeView.ID);
 		ProjectsSourceCodeView sview = (ProjectsSourceCodeView)sourcViewPart;
 		
 		IViewPart testVviewPart = window.getActivePage().findView(ProjectsTestView.ID);
 		ProjectsTestView tview = (ProjectsTestView)testVviewPart;
 		
-//		if(sview.input(fileName) && tview.input(fileName)){
-//			File file = new File("config\\ProjectsList.txt");  
-//			try {  
-//				BufferedWriter writer  = new BufferedWriter(new FileWriter(file, true));
-//				writer.write(fileName + "\r\n");  
-//				writer.flush();  
-//				writer.close();  
-//			} catch (FileNotFoundException e) {  
-//				e.printStackTrace();  
-//			} catch (IOException e) {  
-//				e.printStackTrace();  
-//			}  
-//		}
+		if(sview.input(fileName) && tview.input(fileName)){
+			File file = new File("config\\ProjectsList.txt");  
+			try {  
+				BufferedWriter writer  = new BufferedWriter(new FileWriter(file, true));
+				writer.write(fileName + "\r\n");  
+				writer.flush();  
+				writer.close();  
+			} catch (FileNotFoundException e) {  
+				e.printStackTrace();  
+			} catch (IOException e) {  
+				e.printStackTrace();  
+			}  
+		}
 		
 		return null;
 	}
