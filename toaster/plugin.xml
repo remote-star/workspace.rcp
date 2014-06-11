@@ -37,6 +37,10 @@
             id="toaster.commands.remove"
             name="移除">
       </command>
+      <command
+            id="toaster.commands.refresh"
+            name="刷新">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -82,8 +86,7 @@
          <command
                commandId="toaster.commands.remove"
                label="移除"
-               style="push"
-               tooltip="213">
+               style="push">
          </command>
          <menu
                label="label">
@@ -93,6 +96,11 @@
                   style="push">
             </command>
          </menu>
+         <command
+               commandId="toaster.commands.refresh"
+               label="刷新"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -110,8 +118,12 @@
             commandId="toaster.commands.create">
       </handler>
       <handler
-            class="commands.RemoveHandler"
+            class="commands.RemoveSouceCodeHandler"
             commandId="toaster.commands.remove">
+      </handler>
+      <handler
+            class="commands.RefreshHandler"
+            commandId="toaster.commands.refresh">
       </handler>
    </extension>
    <extension

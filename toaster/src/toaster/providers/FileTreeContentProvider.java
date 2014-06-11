@@ -10,37 +10,25 @@ import java.util.ArrayList;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import toaster.sources.Project;
+import toaster.sources.Projects;
+
 public class FileTreeContentProvider implements ITreeContentProvider {
 
-	Object[] roots;
-	
-	public FileTreeContentProvider(){
-		ArrayList<File> projects = new ArrayList<>();
-		File file = new File("config\\ProjectsList.txt");  
-		try {  
-			BufferedReader reader = new BufferedReader(new FileReader(file));  
-			String line = reader.readLine();  
-			while(line!=null){  
-				projects.add(new File(line));
-				line = reader.readLine();  
-			}  
-			reader.close();  
-		} catch (FileNotFoundException e) {  
-			e.printStackTrace();  
-		} catch (IOException e) {  
-			e.printStackTrace();  
-		}  
-		roots = projects.toArray();
-	}
-	
 	public Object[] getChildren(Object arg0) { 
 		//返回树的下一级节点
+		if(arg0 instanceof Project){
+			return ((Project)arg0).listSourceFiles();
+		}
 		return ((File) arg0).listFiles();
 	}
 	
 	public Object getParent(Object arg0) {
 
 		// 返回树的上一级节点  
+		if(arg0 instanceof Project){
+			return "root";
+		}
 		return ((File) arg0).getParentFile(); 
 	}
 
@@ -51,7 +39,7 @@ public class FileTreeContentProvider implements ITreeContentProvider {
 	}
 
 	public Object[] getElements(Object arg0) { 
-		return roots;
+		return Projects.getInstance().getProjectList().toArray();
 	}
 	
 	public void dispose() { 
@@ -60,9 +48,4 @@ public class FileTreeContentProvider implements ITreeContentProvider {
 	public void inputChanged(Viewer arg0, Object arg1, Object arg2) { 
 
 	}
-	
-	public void setRoots(Object[] newRoots){
-		this.roots = newRoots;
-	}
-
 }

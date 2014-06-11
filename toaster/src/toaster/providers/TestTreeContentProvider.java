@@ -10,36 +10,10 @@ import java.util.ArrayList;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import toaster.sources.Project;
+import toaster.sources.Projects;
+
 public class TestTreeContentProvider implements ITreeContentProvider {
-
-	Object[] roots;
-
-	public TestTreeContentProvider(){
-		//		ArrayList<String> projectNames = new ArrayList<>();
-		ArrayList<File> projectFolders = new ArrayList<>();
-		File file = new File("config\\ProjectsList.txt");  
-		try {  
-			BufferedReader reader = new BufferedReader(new FileReader(file));  
-			String line = reader.readLine();  
-			while(line!=null){  
-				String projectName = line.substring(line.lastIndexOf("\\")+1);
-				//				projectNames.add(pojectName);
-				File projectFolder = new File("testFiles\\" + projectName);
-				if(!projectFolder.exists()){
-					projectFolder.mkdir();
-				}
-				projectFolders.add(projectFolder);
-				line = reader.readLine();  
-			}  
-			reader.close();  
-		} catch (FileNotFoundException e) {  
-			e.printStackTrace();  
-		} catch (IOException e) {  
-			e.printStackTrace();  
-		}  
-		roots = projectFolders.toArray();
-	}
-
 
 	@Override
 	public void dispose() {
@@ -55,18 +29,24 @@ public class TestTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		return roots;
+		return Projects.getInstance().getProjectList().toArray();
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		//返回树的下一级节点
+		if(parentElement instanceof Project){
+			return ((Project) parentElement).listTestFiles();
+		}
 		return ((File) parentElement).listFiles();
 	}
 
 	@Override
 	public Object getParent(Object element) {
 		// 返回树的上一级节点  
+		if(element instanceof Project){
+			return "root";
+		}
 		return ((File) element).getParentFile(); 
 	}
 
@@ -76,9 +56,4 @@ public class TestTreeContentProvider implements ITreeContentProvider {
 		// 判断树是否有下一级节点，true为在节点显示"+"信息 
 		return obj == null ? false : obj.length > 0;
 	}
-	
-	public void setRoots(Object[] newRoots){
-		this.roots = newRoots;
-	}
-
 }

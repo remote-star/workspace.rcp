@@ -9,21 +9,29 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 
 import toaster.sources.ImageShop;
+import toaster.sources.Project;
 
-public class FileTreeLabelProvider implements ILabelProvider {
+public class TreeLabelProvider implements ILabelProvider {
 
 	private List listeners;
 
-	public FileTreeLabelProvider() { 
+	public TreeLabelProvider() { 
 		listeners = new ArrayList();
 	}
 
 	public Image getImage(Object arg0) { 
 		//返回目录或文件的图标 
-		return ((File) arg0).isDirectory() ? ImageShop.get(ImageShop.FOLDER_IMAGE) : ImageShop.get(ImageShop.FILE_IMAGE); 
+		if(arg0 instanceof Project){
+			return ImageShop.get(ImageShop.PROJECT_IMAGE);
+		} else {
+			return ((File) arg0).isDirectory() ? ImageShop.get(ImageShop.FOLDER_IMAGE) : ImageShop.get(ImageShop.FILE_IMAGE); 
+		}
 	}
 
 	public String getText(Object arg0) { 
+		if( arg0 instanceof Project){
+			return ((Project)arg0).getName();
+		}
 		return ((File) arg0).getName();
 	}
 

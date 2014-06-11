@@ -1,11 +1,13 @@
 package toaster.views;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -107,7 +109,6 @@ public class BasicTreeView extends ViewPart {
 		} else {
 			return it.getText();
 		}
-
 	}
 
 	private boolean openable(File file) {
@@ -115,5 +116,21 @@ public class BasicTreeView extends ViewPart {
 			return false;
 		}
 		return true;
+	}
+	
+	public void remove(ArrayList<File> toDelete) {
+		Object[] roots = ((ITreeContentProvider)tv.getContentProvider()).getElements("root");
+		ArrayList<Object> list = new ArrayList();
+		for(Object o : roots){
+			if(!toDelete.contains(o)){
+				list.add(o);
+			}
+		}
+		roots = list.toArray();
+	}
+
+	public void refresh() {
+		System.out.println("refresh");
+		tv.refresh();
 	}
 }

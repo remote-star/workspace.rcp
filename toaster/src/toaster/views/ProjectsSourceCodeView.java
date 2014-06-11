@@ -7,8 +7,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 
 import toaster.providers.FileTreeContentProvider;
-import toaster.providers.FileTreeLabelProvider;
-
+import toaster.providers.TestTreeContentProvider;
+import toaster.providers.TreeLabelProvider;
 
 public class ProjectsSourceCodeView extends BasicTreeView {
 
@@ -20,47 +20,19 @@ public class ProjectsSourceCodeView extends BasicTreeView {
 		super.createPartControl(parent);
 		tv.setContentProvider(new FileTreeContentProvider()); 
 		// 添加标签管理器
-		tv.setLabelProvider(new FileTreeLabelProvider()); 
+		tv.setLabelProvider(new TreeLabelProvider()); 
 		// 设置treeviewer的输入
 		tv.setInput("root"); // pass a non-null that will be ignored
 	}
-
-	public boolean input(String path){
-		File file = new File(path);
-		if(!file.exists()){
-			return false;
-		}
+	
+	public boolean isProject(File f ){
 		Object[] roots = ((FileTreeContentProvider)(tv.getContentProvider())).getElements("root");
-		ArrayList<Object> list = new ArrayList<>();
 		for(Object o : roots){
-			if(o.equals(file)){
-				MessageBox mb = new MessageBox(shell);
-				mb.setMessage("已有同名项目，不能重复导入");
-				mb.setText("不能导入");
-				mb.open();
-				return false;
-			} else {
-				list.add(o);
+			if(o.equals(f)){
+				return true;
 			}
 		}
-		list.add(file);
-		((FileTreeContentProvider)(tv.getContentProvider())).setRoots(list.toArray());
-		tv.refresh("root");
-		return true;
-	}
-
-	public void remove(ArrayList<Object> toDelete) {
-		Object[] roots = ((FileTreeContentProvider)(tv.getContentProvider())).getElements("root");
-		ArrayList<Object> list = new ArrayList();
-		for(Object o : roots){
-			if(!toDelete.contains(o)){
-				list.add(o);
-			} else {
-//				tv.
-			}
-		}
-		list.removeAll(toDelete);
-		roots = list.toArray();
+		return false;
 	}
 }
 
