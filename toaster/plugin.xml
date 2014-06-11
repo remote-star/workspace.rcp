@@ -35,7 +35,7 @@
       </command>
       <command
             id="toaster.commands.remove"
-            name="移除">
+            name="移除项目">
       </command>
       <command
             id="toaster.commands.refresh"
@@ -85,7 +85,7 @@
             locationURI="popup:toaster.views.ProjectsSourceCodeView?after=additions">
          <command
                commandId="toaster.commands.remove"
-               label="移除"
+               label="移除项目"
                style="push">
          </command>
          <menu
@@ -118,7 +118,7 @@
             commandId="toaster.commands.create">
       </handler>
       <handler
-            class="commands.RemoveSouceCodeHandler"
+            class="commands.RemoveProjectHandler"
             commandId="toaster.commands.remove">
       </handler>
       <handler

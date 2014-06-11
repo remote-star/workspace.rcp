@@ -30,6 +30,9 @@ public class Project {
 			sourceProjectFolder = sourceProject;
 		}
 		testProjectFolder = new File(Configuration.getWorkspacePath() + "test" + File.separator + projectName);
+		if(!testProjectFolder.exists()){
+			testProjectFolder.mkdirs();
+		}
 	}
 	
 	public Project(File sourceProject){
@@ -38,11 +41,9 @@ public class Project {
 		sourceProjectFolder = sourceProject;
 		testProjectFolder = new File(Configuration.getWorkspacePath() + "test" + File.separator + projectName);
 		if(!testProjectFolder.exists()){
-			System.out.println("no exists");
-			System.out.println(testProjectFolder.getAbsolutePath());
-			System.out.println(testProjectFolder.mkdirs());
+			testProjectFolder.mkdirs();
 		}
-		if(sourceProjectFolder.getPath().indexOf(Configuration.getWorkspacePath())>0){
+		if(sourceProjectFolder.getPath().indexOf(Configuration.getWorkspacePath()) >= 0){
 			copied = true;
 		} else {
 			copied = false;
@@ -65,6 +66,10 @@ public class Project {
 		return "root";
 	}
 
+	public String getPath(){
+		return sourceProjectFolder.getAbsolutePath();
+	}
+	
     // 复制文件
     public void copyFile(File sourceFile, File targetFile) throws IOException {
         BufferedInputStream inBuff = null;
