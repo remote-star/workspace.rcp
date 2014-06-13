@@ -233,10 +233,10 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="toaster.editor.CodeEditor"
-            default="false"
-            id="toaster.editor.CodeEditor"
-            name="代码">
+            class="toaster.editors.SimpleEditor"
+            default="true"
+            id="org.eclipse.ui.examples.rcp.texteditor.editors.SimpleEditor"
+            name="编辑器">
       </editor>
    </extension>
 

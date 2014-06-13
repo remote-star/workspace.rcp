@@ -1,9 +1,16 @@
 package toaster.views;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -14,21 +21,31 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IPersistableElement;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.ViewPart;
 
-import toaster.editor.CodeEditor;
-import toaster.editor.CodeEditorInput;
+import toaster.editors.PathEditorInput;
+import toaster.editors.XML.XMLEditor;
 import toaster.providers.FileTreeContentProvider;
+import toaster.sources.Project;
 
 public class BasicTreeView extends ViewPart {
 
 	
 
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+	IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow(); 
 	TreeViewer tv;
 	
 	@Override
@@ -50,13 +67,18 @@ public class BasicTreeView extends ViewPart {
 				IStructuredSelection selection =
 						(IStructuredSelection) event.getSelection();
 				Object selected = selection.getFirstElement();
+				if(selected instanceof Project){
+					tv.setExpandedState(selected, !tv.getExpandedState(selected));
+					return;
+				}
 				if (selected instanceof File){
 					File file = (File)selected;
 					if(file.isDirectory()){
 						tv.setExpandedState(file, !tv.getExpandedState(file));
+						return;
 					} else {
-						IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow(); 
-						CodeEditorInput editorInput = new CodeEditorInput();
+						
+//						CodeEditorInput editorInput = new CodeEditorInput();
 
 						TreeItem selectedItem = tv.getTree().getSelection()[0];
 						String relativePath = getPath(selectedItem);
@@ -81,14 +103,12 @@ public class BasicTreeView extends ViewPart {
 							return;
 						}
 
-						// 打开该编辑器
+						IEditorInput input= createEditorInput(file);
+						String editorId= getEditorId(file);
+						IWorkbenchPage page= window.getActivePage();
 						try {
-							CodeEditor editor = (CodeEditor)window.getActivePage().openEditor(editorInput, CodeEditor.ID);
-							editor.readFile(file);
-							editor.setMyTitle(file.getName(), relativePath);
-							editor.setFocus();
+							page.openEditor(input, editorId);
 						} catch (PartInitException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -96,13 +116,65 @@ public class BasicTreeView extends ViewPart {
 			}
 		});
 	}
-
+//	FileStoreEditorInput ss = new FileStoreEditorInput(fs);IFileEditorInput ssa = new IFileEditorInput() {
+//	
+//	@Override
+//	public Object getAdapter(Class adapter) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	
+//	@Override
+//	public String getToolTipText() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	
+//	@Override
+//	public IPersistableElement getPersistable() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	
+//	@Override
+//	public String getName() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	
+//	@Override
+//	public ImageDescriptor getImageDescriptor() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	
+//	@Override
+//	public boolean exists() {
+//		// TODO Auto-generated method stub
+//		return false;
+//	}
+//};
+	private IEditorInput createEditorInput(File file) {
+		IPath location= new Path(file.getAbsolutePath());
+		PathEditorInput input= new PathEditorInput(location);
+		return input;
+	}
+	
+	
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
 
 	}
-
+	
+	private String getEditorId(File file) {
+		IWorkbench workbench= window.getWorkbench();
+		IEditorRegistry editorRegistry= workbench.getEditorRegistry();
+		IEditorDescriptor descriptor= editorRegistry.getDefaultEditor(file.getName());
+		if (descriptor != null)
+			return descriptor.getId();
+		return "org.eclipse.ui.examples.rcp.texteditor.editors.SimpleEditor"; //$NON-NLS-1$
+	}
 	public String getPath(TreeItem it){
 		if(it.getParentItem() != null){
 			return getPath(it.getParentItem()) + "\\" + it.getText();

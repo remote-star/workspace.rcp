@@ -24,8 +24,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import toaster.editor.CodeEditor;
-import toaster.editor.CodeEditorInput;
 import toaster.providers.FileTreeContentProvider;
 import toaster.providers.TestTreeContentProvider;
 import toaster.providers.TreeLabelProvider;

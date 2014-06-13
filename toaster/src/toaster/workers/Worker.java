@@ -11,8 +11,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import toaster.editor.CodeEditor;
-import toaster.editor.CodeEditorInput;
+import toaster.editors.XML.XMLEditor;
 
 public class Worker {
 	
@@ -28,7 +27,7 @@ public class Worker {
 		File file = new File((String)item.getData());
 		if(!file.isDirectory()){
 			IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow(); 
-			CodeEditorInput editorInput = new CodeEditorInput();
+//			CodeEditorInput editorInput = new CodeEditorInput();
 			String relativePath = getPath(item);
 			
 			IEditorReference[] ies = window.getActivePage().getEditorReferences();
@@ -50,16 +49,16 @@ public class Worker {
 				return;
 			}
 			
-			// 打开该编辑器
-			try {
-				CodeEditor editor = (CodeEditor)window.getActivePage().openEditor(editorInput, CodeEditor.ID);
-				editor.readFile(file);
-				editor.setMyTitle(item.getText(), relativePath);
-				editor.setFocus();
-			} catch (PartInitException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			// 打开该编辑器
+//			try {
+//////				CodeEditor editor = (CodeEditor)window.getActivePage().openEditor(editorInput, XMLEditor.ID);
+////				editor.readFile(file);
+////				editor.setMyTitle(item.getText(), relativePath);
+////				editor.setFocus();
+//			} catch (PartInitException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 	}
 

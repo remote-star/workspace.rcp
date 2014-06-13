@@ -20,6 +20,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
+import toaster.tools.FileTools;
 import toaster.views.ProjectsSourceCodeView;
 import toaster.views.ProjectsTestView;
 
@@ -129,9 +130,9 @@ public class Projects {
 			PathToRemove.add(p.getPath());
 			System.out.println(p.copied);
 			if(p.copied == true){
-				p.sourceProjectFolder.delete();
+				FileTools.getInstance().deleteDirectory(p.sourceProjectFolder.getAbsolutePath());
 			}
-			p.testProjectFolder.delete();
+			FileTools.getInstance().deleteDirectory(p.testProjectFolder.getAbsolutePath());
 		}
 		try {             
 			File file = new File("config\\ProjectsList.txt");     

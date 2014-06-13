@@ -3,8 +3,6 @@ package toaster.sources;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -13,8 +11,6 @@ import org.eclipse.swt.graphics.Image;
 public class ImageShop {
 	  private static ImageRegistry register = new ImageRegistry();
 	  
-//      private static Set keys = new HashSet();
-      
       public static String PROJECT_IMAGE = "project_obj";
       
       public static String FOLDER_IMAGE = "fldr_obj";
@@ -30,14 +26,6 @@ public class ImageShop {
 			}
       }
       
-//      public static ImageDescriptor getDescriptor(String key) {
-//             ImageDescriptor image = register.getDescriptor(key);
-//             if (image == null) {
-//                    image = ImageDescriptor.getMissingImageDescriptor();
-//             }
-//             return image;
-//      }
-      
       public static Image get(String key) {
              Image image = register.get(key);
              if (image == null) {
@@ -46,18 +34,7 @@ public class ImageShop {
              return image;
       }
       
-//      public static String[] getImageKey() {
-//             return (String[]) keys.toArray(new String[keys.size()]);
-//      }
-      
       private static void initial() throws MalformedURLException {
-//             Bundle bundle = Platform.getBundle(PwdgatePlugin.ID);
-//             URL url = bundle.getEntry("icons");
-//             try {
-//                    url = Platform.asLocalURL(url);
-//             } catch (Exception e) {
-//                    PwdgatePlugin.log("get root path", e);
-//             }
              File file = new File("icons");
              File[] images = file.listFiles();
              for (int i = 0; i < images.length; i++) {
@@ -73,7 +50,6 @@ public class ImageShop {
                     URL fullPathString = new URL("file:icons/" + name);
                     ImageDescriptor des = ImageDescriptor.createFromURL(fullPathString);
                     register.put(key, des);
-//                    keys.add(key);
              }
       }
 }
