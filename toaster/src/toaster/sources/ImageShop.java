@@ -11,11 +11,13 @@ import org.eclipse.swt.graphics.Image;
 public class ImageShop {
 	  private static ImageRegistry register = new ImageRegistry();
 	  
-      public static String PROJECT_IMAGE = "project_obj";
+      public static String PROJECT_ICON = "project_obj";
       
-      public static String FOLDER_IMAGE = "fldr_obj";
+      public static String FOLDER_ICON = "fldr_obj";
       
-      public static String FILE_IMAGE = "file_obj";
+      public static String FILE_ICON = "file_obj";
+      
+      public static String PIC_ICON = "image_obj";
       
       static {
              try {

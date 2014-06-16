@@ -236,7 +236,14 @@
             class="toaster.editors.SimpleEditor"
             default="true"
             id="org.eclipse.ui.examples.rcp.texteditor.editors.SimpleEditor"
-            name="编辑器">
+            name="默认编辑器">
+      </editor>
+      <editor
+            class="toaster.editors.XML.XMLEditor"
+            default="false"
+            extensions="xml,html"
+            id="toaster.editors.XMLEditor"
+            name="XML编辑器">
       </editor>
    </extension>
 

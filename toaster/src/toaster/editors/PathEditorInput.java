@@ -23,6 +23,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class PathEditorInput implements IPathEditorInput {
 	private IPath fPath;
+	private IPath base;
 	
 	/**
 	 * Creates an editor input based of the given file resource.

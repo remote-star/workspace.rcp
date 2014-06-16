@@ -19,7 +19,7 @@ public class Project {
 		if(copied){
 			sourceProjectFolder = new File(Configuration.getWorkspacePath() + "source" + File.separator + projectName);
 			try {
-				FileTools.getInstance().copyDirectiory(sourceProject, sourceProjectFolder);
+				FileTools.copyDirectiory(sourceProject, sourceProjectFolder);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

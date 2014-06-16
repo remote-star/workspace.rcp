@@ -6,20 +6,37 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileTools {
 
-	private static FileTools instance;
+	private static ArrayList<String> CodeExtentions = new ArrayList<>();
+
+	private static ArrayList<String> PicExtentions = new ArrayList<>();
 	
-	public static FileTools getInstance(){
-		if (instance == null) {
-			instance = new FileTools();
-		}
-		return instance;
+	private static ArrayList<String> UnopenableExtentions = new ArrayList<>();
+	
+	static {
+		CodeExtentions.add("c");
+		CodeExtentions.add("cpp");
+		CodeExtentions.add("xml");
+		CodeExtentions.add("html");
+		CodeExtentions.add("h");
+		
+		PicExtentions.add("gif");
+		PicExtentions.add("png");
+		PicExtentions.add("bmp");
+		PicExtentions.add("jpeg");
+		PicExtentions.add("raw");
+		
+		UnopenableExtentions.add("exe");
+		UnopenableExtentions.add("do");
+		UnopenableExtentions.add("xls");
 	}
 	
+	
     // 复制文件
-    public void copyFile(File sourceFile, File targetFile) throws IOException {
+    public static void copyFile(File sourceFile, File targetFile) throws IOException {
         BufferedInputStream inBuff = null;
         BufferedOutputStream outBuff = null;
         try {
@@ -47,7 +64,7 @@ public class FileTools {
     }
 
     // 复制文件夹
-    public void copyDirectiory(File sourceDir, File targetDir) throws IOException {
+    public static void copyDirectiory(File sourceDir, File targetDir) throws IOException {
         // 新建目标目录
         targetDir.mkdirs();
         // 获取源文件夹当前下的文件或目录
@@ -76,7 +93,7 @@ public class FileTools {
 	 * @param   sPath 被删除目录的文件路径 
 	 * @return  目录删除成功返回true，否则返回false 
 	 */  
-	public boolean deleteDirectory(String sPath) {  
+	public static boolean deleteDirectory(String sPath) {  
 	    //如果sPath不以文件分隔符结尾，自动添加文件分隔符  
 	    if (!sPath.endsWith(File.separator)) {  
 	        sPath = sPath + File.separator;  
@@ -114,7 +131,7 @@ public class FileTools {
 	 * @param   sPath    被删除文件的文件名 
 	 * @return 单个文件删除成功返回true，否则返回false 
 	 */  
-	public boolean deleteFile(String sPath) {  
+	public static boolean deleteFile(String sPath) {  
 	    boolean flag = false;  
 	    File file = new File(sPath);  
 	    // 路径为文件且不为空则进行删除  
@@ -124,4 +141,25 @@ public class FileTools {
 	    }  
 	    return flag;  
 	}  
+	
+	public static boolean openable(File file) {
+		if(file.getName().lastIndexOf(".") < 0){
+			return true;
+		}
+		if(PicExtentions.contains(file.getName().substring(file.getName().lastIndexOf(".") + 1)) ||
+				UnopenableExtentions.contains(file.getName().substring(file.getName().lastIndexOf(".") + 1))){
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean isPic(File file) {
+		if(file.getName().lastIndexOf(".") < 0){
+			return false;
+		}
+		if(PicExtentions.contains(file.getName().substring(file.getName().lastIndexOf(".") + 1))){
+			return true;
+		}
+		return false;
+	}
 }

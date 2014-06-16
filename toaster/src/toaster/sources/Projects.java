@@ -130,9 +130,9 @@ public class Projects {
 			PathToRemove.add(p.getPath());
 			System.out.println(p.copied);
 			if(p.copied == true){
-				FileTools.getInstance().deleteDirectory(p.sourceProjectFolder.getAbsolutePath());
+				FileTools.deleteDirectory(p.sourceProjectFolder.getAbsolutePath());
 			}
-			FileTools.getInstance().deleteDirectory(p.testProjectFolder.getAbsolutePath());
+			FileTools.deleteDirectory(p.testProjectFolder.getAbsolutePath());
 		}
 		try {             
 			File file = new File("config\\ProjectsList.txt");     

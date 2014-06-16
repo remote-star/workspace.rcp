@@ -39,6 +39,7 @@ import toaster.editors.PathEditorInput;
 import toaster.editors.XML.XMLEditor;
 import toaster.providers.FileTreeContentProvider;
 import toaster.sources.Project;
+import toaster.tools.FileTools;
 
 public class BasicTreeView extends ViewPart {
 
@@ -95,7 +96,7 @@ public class BasicTreeView extends ViewPart {
 
 						Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 						//检测选择文件是否适宜打开显示，如果不是则弹出提示并拒绝打开
-						if(!openable(file)){
+						if(!FileTools.openable(file)){
 							MessageBox mb = new MessageBox(shell);
 							mb.setMessage("此文件类型不适宜用编辑器打开");
 							mb.setText("不能打开");
@@ -105,6 +106,7 @@ public class BasicTreeView extends ViewPart {
 
 						IEditorInput input= createEditorInput(file);
 						String editorId= getEditorId(file);
+						System.out.println(editorId);
 						IWorkbenchPage page= window.getActivePage();
 						try {
 							page.openEditor(input, editorId);
@@ -116,44 +118,7 @@ public class BasicTreeView extends ViewPart {
 			}
 		});
 	}
-//	FileStoreEditorInput ss = new FileStoreEditorInput(fs);IFileEditorInput ssa = new IFileEditorInput() {
-//	
-//	@Override
-//	public Object getAdapter(Class adapter) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//	
-//	@Override
-//	public String getToolTipText() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//	
-//	@Override
-//	public IPersistableElement getPersistable() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//	
-//	@Override
-//	public String getName() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//	
-//	@Override
-//	public ImageDescriptor getImageDescriptor() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//	
-//	@Override
-//	public boolean exists() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-//};
+
 	private IEditorInput createEditorInput(File file) {
 		IPath location= new Path(file.getAbsolutePath());
 		PathEditorInput input= new PathEditorInput(location);
@@ -164,7 +129,6 @@ public class BasicTreeView extends ViewPart {
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
-
 	}
 	
 	private String getEditorId(File file) {
@@ -181,13 +145,6 @@ public class BasicTreeView extends ViewPart {
 		} else {
 			return it.getText();
 		}
-	}
-
-	private boolean openable(File file) {
-		if(file.getAbsolutePath().endsWith(".exe")){
-			return false;
-		}
-		return true;
 	}
 	
 	public void remove(ArrayList<File> toDelete) {

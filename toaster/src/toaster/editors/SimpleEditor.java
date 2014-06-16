@@ -8,7 +8,7 @@ public class SimpleEditor extends AbstractTextEditor {
 	public static final String ID = "org.eclipse.ui.examples.rcp.texteditor.editors.SimpleEditor";
 	public SimpleEditor() {
 		super();
-//		internal_init();
+		internal_init();
 	}
 
 	/**
