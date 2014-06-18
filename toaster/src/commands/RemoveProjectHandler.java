@@ -34,12 +34,19 @@ public class RemoveProjectHandler extends AbstractHandler {
 				return null;
 			} 
 			
-			for (@SuppressWarnings("unchecked")Iterator<Project> iterator = strucSelection.iterator(); iterator.hasNext();) {
-				toRemove.add(iterator.next());
+			Iterator iterator = strucSelection.iterator(); iterator.hasNext(); {
+				Object o = iterator.next();
+				if(o instanceof Project){
+					toRemove.add(((Project)o));
+				}
 			}
 
 			Projects.getInstance().removeProject(toRemove);
 		}
 		return null;
+	}
+	
+	void enableWhen(){
+		
 	}
 }

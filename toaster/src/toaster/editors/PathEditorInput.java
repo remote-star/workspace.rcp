@@ -74,7 +74,7 @@ public class PathEditorInput implements IPathEditorInput {
 	 * @see org.eclipse.ui.IEditorInput#getName()
 	 */
 	public String getName() {
-		return fPath.toString();
+		return fPath.lastSegment().toString();
 	}
 	
 	/*

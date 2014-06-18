@@ -8,6 +8,8 @@ import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 
+import toaster.editors.ColorManager;
+
 
 public class XMLTagScanner extends RuleBasedScanner {
 

@@ -41,6 +41,10 @@
             id="toaster.commands.refresh"
             name="刷新">
       </command>
+      <command
+            id="toaster.commands.newTestFile"
+            name="新建测试文件">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -87,20 +91,33 @@
                commandId="toaster.commands.remove"
                label="移除项目"
                style="push">
+            <visibleWhen
+                  checkEnabled="true">
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <instanceof
+                           value="toaster.sources.Project">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </visibleWhen>
          </command>
-         <menu
-               label="label">
-            <command
-                  commandId="toaster.commands.remove"
-                  label="啊啊"
-                  style="push">
-            </command>
-         </menu>
          <command
                commandId="toaster.commands.refresh"
                label="刷新"
                style="push">
          </command>
+         <menu
+               label="新建">
+            <command
+                  commandId="toaster.commands.newTestFile"
+                  label="测试文件"
+                  style="push">
+            </command>
+         </menu>
       </menuContribution>
    </extension>
    <extension
@@ -125,6 +142,10 @@
             class="commands.RefreshHandler"
             commandId="toaster.commands.refresh">
       </handler>
+      <handler
+            class="commands.NewTestFile"
+            commandId="toaster.commands.newTestFile">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -132,7 +153,7 @@
             allowMultiple="false"
             class="toaster.views.ProjectsSourceCodeView"
             id="toaster.views.ProjectsSourceCodeView"
-            name="项目源文件"
+            name="项目"
             restorable="true">
       </view>
       <view
@@ -163,12 +184,6 @@
             class="toaster.views.ToolView"
             id="toaster.views.ToolView"
             name="工具"
-            restorable="true">
-      </view>
-      <view
-            class="toaster.views.ProjectsTestView"
-            id="toaster.views.ProjectsTestView"
-            name="项目测试文件"
             restorable="true">
       </view>
    </extension>

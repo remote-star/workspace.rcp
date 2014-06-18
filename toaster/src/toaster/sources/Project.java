@@ -2,6 +2,7 @@ package toaster.sources;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import toaster.tools.FileTools;
 
@@ -52,6 +53,13 @@ public class Project {
 		return projectName;
 	}
 	
+	public File[] listFiles(){
+		File[] sourceFiles = listSourceFiles();
+		File[] copyArr = Arrays.copyOf(sourceFiles, sourceFiles.length+1);
+		copyArr[sourceFiles.length] = testProjectFolder;
+		return copyArr;
+	}
+	
 	public File[] listSourceFiles(){
 		return sourceProjectFolder.listFiles();
 	}
@@ -66,5 +74,20 @@ public class Project {
 
 	public String getPath(){
 		return sourceProjectFolder.getAbsolutePath();
+	}
+	
+	public String getTestFolderPath(){
+		return this.testProjectFolder.getAbsolutePath();
+	}
+	
+	public File getTestFolderFile(){
+		return testProjectFolder;
+	}
+	
+	public File getSourceFolderFile(){
+		return sourceProjectFolder;
+	}
+	public String getSourceFolderPath(){
+		return this.sourceProjectFolder.getAbsolutePath();
 	}
 }

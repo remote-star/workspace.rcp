@@ -3,12 +3,13 @@ package toaster.views;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 
 import toaster.providers.FileTreeContentProvider;
-import toaster.providers.TestTreeContentProvider;
 import toaster.providers.TreeLabelProvider;
+import toaster.sources.Project;
 
 public class ProjectsSourceCodeView extends BasicTreeView {
 
@@ -33,6 +34,14 @@ public class ProjectsSourceCodeView extends BasicTreeView {
 			}
 		}
 		return false;
+	}
+	
+	public Project getRoot(Object element) {
+		FileTreeContentProvider provider = (FileTreeContentProvider)(tv.getContentProvider());
+		while(!(element instanceof Project)){
+			element = provider.getParent(element);
+		}
+		return (Project)element;
 	}
 }
 

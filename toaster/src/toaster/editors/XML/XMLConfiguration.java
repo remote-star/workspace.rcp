@@ -10,6 +10,8 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
+import toaster.editors.ColorManager;
+
 
 public class XMLConfiguration extends SourceViewerConfiguration {
 	private XMLDoubleClickStrategy doubleClickStrategy;

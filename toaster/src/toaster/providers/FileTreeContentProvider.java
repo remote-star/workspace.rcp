@@ -18,7 +18,7 @@ public class FileTreeContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(Object arg0) { 
 		//返回树的下一级节点
 		if(arg0 instanceof Project){
-			return ((Project)arg0).listSourceFiles();
+			return ((Project)arg0).listFiles();
 		}
 		return ((File) arg0).listFiles();
 	}
@@ -28,6 +28,12 @@ public class FileTreeContentProvider implements ITreeContentProvider {
 		// 返回树的上一级节点  
 		if(arg0 instanceof Project){
 			return "root";
+		}
+		File child = (File)arg0;
+		for(Project p : Projects.getInstance().getProjectList()){
+			if(p.getSourceFolderFile().equals(child.getParentFile()) || p.getTestFolderFile().equals(child)){
+				return p;
+			}
 		}
 		return ((File) arg0).getParentFile(); 
 	}

@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -39,6 +40,7 @@ import toaster.editors.PathEditorInput;
 import toaster.editors.XML.XMLEditor;
 import toaster.providers.FileTreeContentProvider;
 import toaster.sources.Project;
+import toaster.tools.EditorTools;
 import toaster.tools.FileTools;
 
 public class BasicTreeView extends ViewPart {
@@ -78,9 +80,6 @@ public class BasicTreeView extends ViewPart {
 						tv.setExpandedState(file, !tv.getExpandedState(file));
 						return;
 					} else {
-						
-//						CodeEditorInput editorInput = new CodeEditorInput();
-
 						TreeItem selectedItem = tv.getTree().getSelection()[0];
 						String relativePath = getPath(selectedItem);
 
@@ -104,41 +103,18 @@ public class BasicTreeView extends ViewPart {
 							return;
 						}
 
-						IEditorInput input= createEditorInput(file);
-						String editorId= getEditorId(file);
-						System.out.println(editorId);
-						IWorkbenchPage page= window.getActivePage();
-						try {
-							page.openEditor(input, editorId);
-						} catch (PartInitException e) {
-							e.printStackTrace();
-						}
+						EditorTools.openEditor(file);
 					}
 				}
 			}
 		});
 	}
 
-	private IEditorInput createEditorInput(File file) {
-		IPath location= new Path(file.getAbsolutePath());
-		PathEditorInput input= new PathEditorInput(location);
-		return input;
-	}
-	
-	
 	@Override
 	public void setFocus() {
 		// TODO Auto-generated method stub
 	}
 	
-	private String getEditorId(File file) {
-		IWorkbench workbench= window.getWorkbench();
-		IEditorRegistry editorRegistry= workbench.getEditorRegistry();
-		IEditorDescriptor descriptor= editorRegistry.getDefaultEditor(file.getName());
-		if (descriptor != null)
-			return descriptor.getId();
-		return "org.eclipse.ui.examples.rcp.texteditor.editors.SimpleEditor"; //$NON-NLS-1$
-	}
 	public String getPath(TreeItem it){
 		if(it.getParentItem() != null){
 			return getPath(it.getParentItem()) + "\\" + it.getText();
@@ -162,4 +138,5 @@ public class BasicTreeView extends ViewPart {
 		System.out.println("refresh");
 		tv.refresh();
 	}
+
 }

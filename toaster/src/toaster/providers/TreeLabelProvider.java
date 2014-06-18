@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 
+import toaster.sources.Configuration;
 import toaster.sources.ImageShop;
 import toaster.sources.Project;
 import toaster.tools.FileTools;
@@ -25,6 +26,9 @@ public class TreeLabelProvider implements ILabelProvider {
 		if(arg0 instanceof Project){
 			return ImageShop.get(ImageShop.PROJECT_ICON);
 		} else if(((File) arg0).isDirectory()) {
+			if(((File)arg0).getParentFile().equals(Configuration.getTestFolder())){
+				return ImageShop.get(ImageShop.TEST_FOLDER_ICON);
+			}
 			return ImageShop.get(ImageShop.FOLDER_ICON);
 		} else if(FileTools.isPic((File)arg0)) {
 			return ImageShop.get(ImageShop.PIC_ICON);
@@ -36,6 +40,8 @@ public class TreeLabelProvider implements ILabelProvider {
 	public String getText(Object arg0) { 
 		if( arg0 instanceof Project){
 			return ((Project)arg0).getName();
+		} else if (((File)arg0).getParentFile().equals(Configuration.getTestFolder())){
+			return "测试文件";
 		}
 		return ((File) arg0).getName();
 	}

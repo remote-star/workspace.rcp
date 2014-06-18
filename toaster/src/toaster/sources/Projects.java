@@ -22,14 +22,12 @@ import org.eclipse.ui.PlatformUI;
 
 import toaster.tools.FileTools;
 import toaster.views.ProjectsSourceCodeView;
-import toaster.views.ProjectsTestView;
 
 public class Projects {
 
 	private ArrayList<Project> projectList = new ArrayList<>();
 	static Projects projects;
 	ProjectsSourceCodeView sview;
-	ProjectsTestView tview;
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 	
 	
@@ -71,9 +69,6 @@ public class Projects {
 
 		IViewPart sourcViewPart = window.getActivePage().findView(ProjectsSourceCodeView.ID);
 		sview = (ProjectsSourceCodeView)sourcViewPart;
-
-		IViewPart testVviewPart = window.getActivePage().findView(ProjectsTestView.ID);
-		tview = (ProjectsTestView)testVviewPart;
 	}
 
 	public ArrayList<Project> getProjectList(){
@@ -162,6 +157,5 @@ public class Projects {
 	
 	public void refreshProjectTreeView(){
 		sview.refresh();
-		tview.refresh();
 	}
 }

@@ -19,6 +19,10 @@ public class ImageShop {
       
       public static String PIC_ICON = "image_obj";
       
+      public static String TEST_FOLDER_ICON = "debug_exc";
+      
+      public static String DEBUG_FILE = "debug";
+      
       static {
              try {
 				initial();

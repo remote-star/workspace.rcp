@@ -1,4 +1,4 @@
-package toaster.editors.XML;
+package toaster.editors;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,8 +8,17 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
-class ColorManager {
+public class ColorManager {
 
+	private static ColorManager instance;
+	
+	public static ColorManager getInstance(){
+		if (instance == null) {
+			instance = new ColorManager();
+		}
+		return instance;
+	}
+	
 	protected Map fColorTable = new HashMap(10);
 
 	public void dispose() {
