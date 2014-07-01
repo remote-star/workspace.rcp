@@ -45,6 +45,10 @@
             id="toaster.commands.newTestFile"
             name="新建测试文件">
       </command>
+      <command
+            id="toaster.commands.newFolder"
+            name="新建文件夹">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -56,6 +60,7 @@
                label="文件">
             <command
                   commandId="toaster.commands.input"
+                  icon="icons/import_prj.gif"
                   label="导入"
                   style="push">
             </command>
@@ -70,6 +75,7 @@
             </separator>
             <command
                   commandId="toaster.commands.exit"
+                  icon="icons/search_rem.gif"
                   label="退出"
                   style="push">
             </command>
@@ -89,6 +95,7 @@
             locationURI="popup:toaster.views.ProjectsSourceCodeView?after=additions">
          <command
                commandId="toaster.commands.remove"
+               icon="icons/delete_edit.gif"
                label="移除项目"
                style="push">
             <visibleWhen
@@ -107,14 +114,23 @@
          </command>
          <command
                commandId="toaster.commands.refresh"
+               icon="icons/refresh.gif"
                label="刷新"
                style="push">
          </command>
          <menu
+               icon="icons/add.gif"
                label="新建">
             <command
                   commandId="toaster.commands.newTestFile"
+                  icon="icons/newfile_wiz.gif"
                   label="测试文件"
+                  style="push">
+            </command>
+            <command
+                  commandId="toaster.commands.newFolder"
+                  icon="icons/newfolder_wiz.gif"
+                  label="文件夹"
                   style="push">
             </command>
          </menu>
@@ -146,42 +162,52 @@
             class="commands.NewTestFile"
             commandId="toaster.commands.newTestFile">
       </handler>
+      <handler
+            class="commands.NewFolderHandler"
+            commandId="toaster.commands.newFolder">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
             class="toaster.views.ProjectsSourceCodeView"
+            icon="icons/packages.gif"
             id="toaster.views.ProjectsSourceCodeView"
             name="项目"
             restorable="true">
       </view>
       <view
             class="toaster.views.InvocationView"
+            icon="icons/call_hierarchy.gif"
             id="toaster.views.InvocationView"
             name="调用"
             restorable="true">
       </view>
       <view
             class="toaster.views.ConsoleView"
+            icon="icons/console.gif"
             id="toaster.views.ConsoleView"
             name="控制台"
             restorable="true">
       </view>
       <view
             class="toaster.views.InformationView"
+            icon="icons/info_obj.gif"
             id="toaster.views.InformationView"
             name="信息"
             restorable="true">
       </view>
       <view
             class="toaster.views.MemberView"
+            icon="icons/icon2.gif"
             id="toaster.views.MemberView"
             name="成员"
             restorable="true">
       </view>
       <view
             class="toaster.views.ToolView"
+            icon="icons/news_update.gif"
             id="toaster.views.ToolView"
             name="工具"
             restorable="true">
@@ -257,6 +283,7 @@
             class="toaster.editors.XML.XMLEditor"
             default="false"
             extensions="xml,html"
+            icon="icons/generic_xml_obj.gif"
             id="toaster.editors.XMLEditor"
             name="XML编辑器">
       </editor>

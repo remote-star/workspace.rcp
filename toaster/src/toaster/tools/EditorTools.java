@@ -22,7 +22,6 @@ public class EditorTools {
 	public static boolean openEditor(File file){
 		IEditorInput input= createEditorInput(file);
 		String editorId= getEditorId(file);
-		System.out.println(editorId);
 		IWorkbenchPage page= window.getActivePage();
 		try {
 			page.openEditor(input, editorId);

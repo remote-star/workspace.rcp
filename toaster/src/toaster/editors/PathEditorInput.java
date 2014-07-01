@@ -11,12 +11,12 @@
 package toaster.editors;
 
 import org.eclipse.core.runtime.IPath;
-
 import org.eclipse.jface.resource.ImageDescriptor;
-
 import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PlatformUI;
+
+import toaster.sources.ImageShop;
 
 /**
  * EditorInput that stores a path.
@@ -68,6 +68,14 @@ public class PathEditorInput implements IPathEditorInput {
 	 */
 	public ImageDescriptor getImageDescriptor() {
 		return PlatformUI.getWorkbench().getEditorRegistry().getImageDescriptor(fPath.toString());
+//		System.out.println(fPath.getFileExtension().toLowerCase());
+//		switch(fPath.getFileExtension().toLowerCase()){
+//			case "xml":
+//				System.out.println("axml");
+//				return ImageShop.getDescripter(ImageShop.XML);
+//			default :
+//				return ImageShop.getDescripter(ImageShop.FILE_ICON);
+//		}
 	}
 	
 	/*

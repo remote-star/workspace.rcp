@@ -67,7 +67,6 @@ public class SimpleDocumentProvider extends AbstractDocumentProvider {
 	private void setDocumentContent(IDocument document, Reader reader) throws IOException {
 		Reader in= new BufferedReader(reader);
 		try {
-			
 			StringBuffer buffer= new StringBuffer(512);
 			char[] readBuffer= new char[512];
 			int n= in.read(readBuffer);

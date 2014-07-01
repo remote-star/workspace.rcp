@@ -23,6 +23,8 @@ public class ImageShop {
       
       public static String DEBUG_FILE = "debug";
       
+      public static String XML = "xml";
+      
       static {
              try {
 				initial();
@@ -57,5 +59,9 @@ public class ImageShop {
                     ImageDescriptor des = ImageDescriptor.createFromURL(fullPathString);
                     register.put(key, des);
              }
+      }
+      
+      public static ImageDescriptor getDescripter(String key){
+    	  return ImageDescriptor.createFromImage(get(key));
       }
 }

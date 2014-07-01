@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="sampleBuilder"
+         name="Sample Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="demo8.builder.SampleBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="sampleNature"
+         name="Sample Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="demo8.builder.SampleNature">
+         </run>
+      </runtime>
+      <builder
+            id="demo8.sampleBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="Sample Project Nature commands"
+            id="demo8.sampleNature.category">
+      </category>
+      <command
+            name="Add/RemoveSample Project Nature"
+            defaultHandler="demo8.builder.AddRemoveSampleNatureHandler"
+            categoryId="demo8.sampleNature.category"
+            id="demo8.addRemoveSampleNature">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <command
+               commandId="demo8.addRemoveSampleNature"
+               label="Disable Sample builder"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <and>
+                        <instanceof
+                              value="org.eclipse.core.resources.IProject">
+                        </instanceof>
+                        <test
+                              value="demo8.sampleNature"
+                              property="org.eclipse.core.resources.projectNature">
+                        </test>
+                     </and>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="demo8.addRemoveSampleNature"
+               label="Enable Sample builder"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <and>
+                        <instanceof
+                              value="org.eclipse.core.resources.IProject">
+                        </instanceof>
+                        <not>
+                           <test
+                                 value="demo8.sampleNature"
+                                 property="org.eclipse.core.resources.projectNature">
+                           </test>
+                        </not>
+                     </and>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+
+</plugin>

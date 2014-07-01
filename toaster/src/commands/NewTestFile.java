@@ -38,7 +38,6 @@ public class NewTestFile extends AbstractHandler {
 		if (selection != null & selection instanceof IStructuredSelection) {
 			IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
-			
 			IWorkbenchWindow window=PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			
 			IViewPart sourcViewPart = (IViewPart) window.getActivePage().getActivePart();
